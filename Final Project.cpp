@@ -5,5 +5,5 @@
 
 int main(void)
 {
-	cout<<"What a group";
+	
 }
