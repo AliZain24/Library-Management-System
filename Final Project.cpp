@@ -4,8 +4,9 @@
 #include<iostream>
 #include<fstream>
 #include<string>
+#include<string.h>
 #include<map>
-static int count=0;
+static int count=1;
 using namespace std;
 
 class book
@@ -59,7 +60,7 @@ void library::removebook(string id)
 
 void library::setterbook(book obj)
 {
-	if(count==0)
+	if(count==1)
 	{
 		ofstream outputfile("Librarybooks.txt");
 		outputfile<<count<<endl;
@@ -76,7 +77,7 @@ void library::setterbook(book obj)
 	}
 	
 	count++;
-		
+	
 }
 
 book library::getterbook(string id)
@@ -101,10 +102,11 @@ book library::getterbook(string id)
 
 int main(void)
 {
-	while(count!=2)
-	{
 	book obj,obj1;
 	string name,id;
+	int found=0;
+	while(count!=3)
+	{
 	cout<<"Please enter the name of the book:";
 	cin>>name;
 	obj.settername(name);
@@ -115,4 +117,24 @@ int main(void)
 	library obj2;
 	obj2.setterbook(obj);
 	}
+	book compare,compare2;
+	ifstream myinput("Librarybooks.txt",ios::in);
+	while(getline(myinput,id))
+	{
+		string input;
+		cout<<"Please enter the name of book to be found:";
+		cin>>input;
+		if(input.compare(id)==0)
+		{
+			cout<<"Success"<<endl;
+			myinput>>id;
+			myinput>>id;
+			cout<<id;
+			found=1;
+		}
+	}
+	if(found==0)
+		{
+			cout<<"Book not found"<<endl;
+		}
 }
