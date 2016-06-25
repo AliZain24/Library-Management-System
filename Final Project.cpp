@@ -5,7 +5,7 @@
 #include<fstream>
 #include<string>
 #include<map>
-
+static int count=0;
 using namespace std;
 
 class book
@@ -43,24 +43,67 @@ string book::getterid()
 class library
 {
 	private:
-		map<char,book> collection;
 		
 	public:
-		void setterbook(char index,book obj);
+		void setterbook(book obj);
 		book getterbook(string id);
 		void removebook(string id);
+		void writetofile(book obj);
 };
 
-void library::setterbook(char index,book obj)
+void library::removebook(string id)
 {
-		collection[index]=obj;
+	ifstream myInput("Librarybooks.txt",ios::in);
+	
 }
 
+void library::setterbook(book obj)
+{
+	if(count==0)
+	{
+		ofstream outputfile("Librarybooks.txt");
+		outputfile<<count<<endl;
+		outputfile<<obj.gettername()<<endl;
+		outputfile<<obj.getterid()<<endl<<endl;
+	}
+	
+	else
+	{
+		ofstream outputfile("Librarybooks.txt",ios::app);
+		outputfile<<count<<endl;
+		outputfile<<obj.gettername()<<endl;
+		outputfile<<obj.getterid()<<endl<<endl;
+	}
+	
+	count++;
+		
+}
 
+book library::getterbook(string id)
+{
+	ifstream myInput("Librarybooks.txt",ios::in);
+	string compare;
+	book obj,obj2;
+	obj2.setterid("null");
+	obj2.settername("0");
+	while(1)
+	{
+		if(compare==id)
+		{
+			return obj;
+		}
+		else
+		{
+			return obj2;
+		}
+	}
+}
 
 int main(void)
 {
-	book obj;
+	while(count!=2)
+	{
+	book obj,obj1;
 	string name,id;
 	cout<<"Please enter the name of the book:";
 	cin>>name;
@@ -68,7 +111,8 @@ int main(void)
 	cout<<"Please enter the id of the book:";
 	cin>>id;
 	obj.setterid(id);
-	ofstream outputfile("Librarybooks.txt");
-	outputfile<<obj.gettername()<<endl;
-	outputfile<<obj.getterid()<<endl;
+	
+	library obj2;
+	obj2.setterbook(obj);
+	}
 }
