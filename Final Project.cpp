@@ -120,7 +120,7 @@ int main(void)
 	book compare,compare2;
 	ifstream myinput("Librarybooks.txt",ios::in);
 	string input;
-	cout<<"Please enter the id of book to be found:";
+	cout<<"Please enter the name of book to be found:";
 	cin>>input;
 	while(getline(myinput,id))
 	{
