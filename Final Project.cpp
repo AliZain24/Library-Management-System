@@ -127,6 +127,7 @@ int main(void)
 		if(input.compare(id)==0)
 		{
 			cout<<"Success"<<endl;
+			cout<<id<<endl;
 			myinput>>id;
 			myinput>>id;
 			cout<<id;
