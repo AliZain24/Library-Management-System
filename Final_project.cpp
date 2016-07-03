@@ -84,6 +84,11 @@ class library
 		book getterbook(string id);
 		void removebook(string id);
 		void writetofile(book obj);
+		void setteruser(user obj);
+		user getteruser(string email);
+		void removeuser(string email);
+		void write_user_in_file(user obj);
+		
 };
 
 void library::removebook(string id)
@@ -113,6 +118,7 @@ void library::setterbook(book obj)
 	count++;
 	
 }
+
 
 book library::getterbook(string id)
 {
