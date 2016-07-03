@@ -6,7 +6,7 @@
 #include<string>
 #include<string.h>
 #include<map>
-static int count=1;
+static int count=1,count1 = 1;
 using namespace std;
 
 class user
@@ -91,11 +91,39 @@ class library
 		
 };
 
+
+void library::removeuser(string email) 
+{
+	ifstream myInput("Libraryuser.txt",ios::in);
+	
+}
+
 void library::removebook(string id)
 {
 	ifstream myInput("Librarybooks.txt",ios::in);
 	
 }
+
+
+void library::setteruser(user obj)
+{
+	if(count1==1)
+	{
+		ofstream outputfile("Libraryuser.txt");
+		outputfile<<count<<endl;
+		outputfile<<obj.gettername()<<endl;
+		outputfile<<obj.getteruser()<<endl<<endl;
+	}
+	
+	else
+	{
+		ofstream outputfile("Libraryuser.txt",ios::app);
+		outputfile<<count1<<endl;
+		outputfile<<obj.gettername()<<endl;
+		outputfile<<obj.getteremail()<<endl<<endl;
+	}
+}
+
 
 void library::setterbook(book obj)
 {
