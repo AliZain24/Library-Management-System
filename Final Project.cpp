@@ -5,9 +5,67 @@
 #include<string>
 #include<map>
 
-static int count=1,found=0;
-
 using namespace std;
+static int count=1,found=0,usercount=0,attempts=0;
+
+class person
+{
+	private:
+		map<char,string>info;
+	
+	public:
+		void settername(string u_name);
+		string gettername();
+		void setterid(string u_id);
+		string getterid();
+		void setpassword(string password);
+		string getpassword(void);
+};
+
+void person::setpassword(string password)
+{
+	info['p']=password;
+}
+
+string person::getpassword(void)
+{
+	return info['p'];
+}
+
+string person::gettername()
+{
+	return info['n'];
+}
+
+void person::settername(string u_name)
+{
+	info['n']=u_name;
+}
+
+void person::setterid(string u_id)
+{
+	info['i']=u_id;
+}
+
+
+
+string person::getterid()
+{
+	return info['i'];
+}
+
+
+class user:public person
+{
+	
+};
+
+class librarian:public person
+{
+	
+};
+
+
 
 class book
 {
@@ -53,6 +111,7 @@ string book::getterid()
 	return features['i'];
 }
 
+
 class library
 {
 	private:
@@ -61,6 +120,7 @@ class library
 		void setterbook(book obj);
 		book getterbook(string id);
 		void removebook(string id);
+		void removeuser(string name);
 		void editbook(string id);
 };
 
@@ -181,32 +241,147 @@ book library::getterbook(string id)
 	myInput.close();
 }
 
+
+int check_librarian(string username,string password)
+{
+	string match1,match2;
+	ifstream output("Librarian.txt",ios::in);
+	while(getline(output,match1))
+	{
+		if(match1==username)
+		{
+			getline(output,match2);
+			if(match2==password)
+			{
+				cout<<"***************     Welcome to the library     ******************"<<endl;
+				return 1;
+			}
+			else
+			{
+				cout<<"Invalid username or password"<<endl;
+				Sleep(2000);
+				system("cls");
+				return 0;
+			}
+		}
+	}
+	return 0;
+}
+
+
+int check_user(string username,string password)
+{
+	string match1,match2,input;
+	input=username.append(".txt");
+	ifstream file(input.c_str(),ios::in);
+	while(getline(file,match1))
+	{
+		if(match1==username)
+		{
+			getline(file,match2);
+			if(match2==password)
+			{
+				cout<<"***************     Welcome to the library     ******************"<<endl;
+				return 1;
+			}
+			else
+			{
+				cout<<"Invalid username or password"<<endl;
+				Sleep(2000);
+				system("cls");
+				return 0;
+			}
+		}
+	}
+	return 0;
+}
+
+
 int main(void)
 {
-	system("Color 1B");//syntax => system("Color ab");  description => a=background color, b=text color, 0 black, 1 blue, 2 green, 3 aqua, 4 red, 5 purple, 6 yellow, 7 white, 8 gray, 9 light blue, A light green, B light aqua, C light red, D light purple, E light yellow, F bright white
-	book obj;
+	while(attempts!=4)
+	{
+		book obj;
 	string name,id,author,choice;
 	int choose;
 	static library obj2;
-	
-	while(1)
+	system("Color 1B");//syntax => system("Color ab");  description => a=background color, b=text color, 0 black, 1 blue, 2 green, 3 aqua, 4 red, 5 purple, 6 yellow, 7 white, 8 gray, 9 light blue, A light green, B light aqua, C light red, D light purple, E light yellow, F bright white
+	string username,password;
+	cout<<"Enter username (without spaces):";
+	getline(cin,username);
+	cout<<"Enter password (without spaces):";
+	getline(cin,password);
+	int check=check_librarian(username,password);
+	int checkuser=check_user(username,password);
+	if(check==1)
 	{
-		cout<<"***************Library Management System*******************"<<endl<<endl;
-		cout<<"What do you want to do?"<<endl;
-		cout<<"To add a book, enter 1"<<endl;
-		cout<<"To remove a book,enter 2"<<endl;
-		cout<<"To view all books, enter 3"<<endl;
-		cout<<"To find a book, enter 4"<<endl;
-		cout<<"To edit a book, enter 5"<<endl;
-		cout<<"To exit, enter 0"<<endl;
-		cout<<"Your choice:";
-		cin>>choose;
 		
-		if(choose==0)
+		while(1)
 		{
-			break;
-		}
-		if(choose==1)
+			cout<<"***************Library Management System*******************"<<endl<<endl;
+			cout<<"What do you want to do?"<<endl;
+			cout<<"To add a user, enter 1"<<endl;
+			cout<<"To remove a user,enter 2"<<endl;
+			cout<<"To view all users, enter 3"<<endl;
+			cout<<"To add a book, enter 4"<<endl;
+			cout<<"To find a book, enter 5"<<endl;
+			cout<<"To edit a book, enter 6"<<endl;
+			cout<<"To view all books, enter 7"<<endl;
+			cout<<"To remove a book, enter 8"<<endl;
+			cout<<"To exit, enter 0"<<endl;
+			cout<<"Your choice:";
+			cin>>choose;
+			attempts=4;
+		
+			if(choose==1)
+			{
+				user person1;
+				string filename;
+				cout<<"Please enter the name of the user (username):";
+				getline(cin,username);
+				getline(cin,username);
+				person1.settername(username);
+				cout<<"Please enter the password:";
+				getline(cin,password);
+				person1.setpassword(password);
+				filename=person1.gettername().append(".txt");
+				ofstream open(filename.c_str(),ios::out);
+				open<<username<<endl;
+				open<<password<<endl;
+			}
+			
+			if(choose==2)
+			{
+				string filename;
+				cout<<"Enter the name of the user to be removed:";
+				getline(cin,username);
+				getline(cin,username);
+				filename=username.append(".txt");
+				ifstream file(filename.c_str(),ios::in);
+				if(file!=NULL)
+				{
+					file.close();
+					remove(filename.c_str());
+					cout<<"Removed"<<endl;
+				}
+				else
+				{
+					cout<<"User not found"<<endl;
+				}
+			}
+			
+			if(choose==3)
+			{
+				
+			}
+			
+			if(choose==0)
+			{	
+				break;
+			}
+			
+			
+			if(choose==4)
 		{
 			label:
 			{
@@ -243,7 +418,7 @@ int main(void)
 				}
 		}
 		
-		if(choose==2)
+		if(choose==8)
 		{
 			int found=0;
 			string input,choice;
@@ -294,7 +469,7 @@ int main(void)
 			}
 		}
 		
-		if(choose==3)
+		if(choose==7)
 		{
 			system("cls");
 			cout<<endl;
@@ -319,7 +494,9 @@ int main(void)
 			getline(cin,input);
 			system("cls");
 		}
-		if(choose==4)
+		
+		
+		if(choose==5)
 		{
 			system("cls");
 			string find;
@@ -337,7 +514,7 @@ int main(void)
 			system("cls");
 		}
 		
-		if(choose==5)
+		if(choose==6)
 		{
 			system("cls");
 			string id;
@@ -346,5 +523,100 @@ int main(void)
 			getline(cin,id);
 			obj2.editbook(id);
 		}
+			//if()
 	}
+	
+	/*book obj;
+	string name,id,author,choice;
+	int choose;
+	static library obj2;
+	
+	while(1)
+	{
+		cout<<"***************Library Management System*******************"<<endl<<endl;
+		cout<<"What do you want to do?"<<endl;
+		cout<<"To add a user, enter 1"<<endl;
+		cout<<"To remove a user,enter 2"<<endl;
+		cout<<"To view all users, enter 3"<<endl;
+		cout<<"To find a book, enter 4"<<endl;
+		cout<<"To edit a book, enter 5"<<endl;
+		cout<<"To exit, enter 0"<<endl;
+		cout<<"Your choice:";
+		cin>>choose;
+		
+		if(choose==1)
+		{
+			
+		}
+	/*string name,filename;
+	librarian sarfraz;
+	user qadoos;
+	getline(cin,name);
+	qadoos.settername(name);
+	//sarfraz.settername("Sarfraz shafi");
+	filename=qadoos.gettername().append(".txt");
+	ofstream open(filename.c_str(),ios::out);}*/
+}
+
+if(checkuser==1)
+{
+	while(1)
+	{
+		cout<<"***************Welcome to the library*******************"<<endl<<endl;
+			cout<<"What do you want to do?"<<endl;
+			cout<<"To issue a book, enter 1"<<endl;
+			cout<<"To return a book, enter 2"<<endl;
+			cout<<"To find a book, enter 3"<<endl;
+			cout<<"To view all books, enter 4"<<endl;
+			cout<<"To exit, enter 0"<<endl;
+			cout<<"Your choice:";
+			cin>>choose;
+			attempts=4;
+			
+		if(choose==4)
+		{
+			system("cls");
+			cout<<endl;
+			string input;
+			ifstream myinput("Librarybooks.txt",ios::in);
+			while(getline(myinput,input))
+			{
+				if(myinput.eof())
+				{
+					break;
+				}
+				cout<<"ID: "<<input<<endl;
+				getline(myinput,input);
+				cout<<"Name of book: "<<input<<endl;
+				getline(myinput,input);
+				cout<<"Author: "<<input<<endl<<endl;
+			}
+			cout<<endl;
+			cout<<"Do you want to go to main menu?"<<endl;
+			cout<<"Just press enter";
+			getline(cin,input);
+			getline(cin,input);
+			system("cls");
+		}
+		
+		if(choose==3)
+		{
+			system("cls");
+			string find;
+			cout<<"Please enter the ID of the book:";
+			getline(cin,find);
+			getline(cin,find);
+			book found;
+			found=obj2.getterbook(find);
+			cout<<"ID: "<<found.getterid()<<endl;
+			cout<<"Name: "<<found.gettername()<<endl;
+			cout<<"Author: "<<found.getterauthor()<<endl<<endl;
+			cout<<"Do you want to go to main menu?"<<endl;
+			cout<<"Just press enter";
+			getline(cin,find);
+			system("cls");
+		}	
+	}
+}
+}
 }
